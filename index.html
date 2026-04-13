@@ -105,7 +105,11 @@
         </div>
       </div>
       <div class="header-right">
-        <div id="display-player-name">Player</div>
+        <div id="player-info-display" style="display: flex; flex-direction: column; align-items: flex-end;">
+            <div id="display-player-name">Player</div>
+            <div id="display-player-email" style="font-size: 10px; color: var(--text-muted); opacity: 0.8; margin-top: 2px;"></div>
+        </div>
+        <button id="leaderboard-btn" title="Leaderboard" class="icon-btn" style="margin-right: 10px;">🏆</button>
         <button id="how-to-play-btn" title="How to Play" class="icon-btn" style="margin-right: 10px;"></button>
         <button id="game-settings-btn" title="Settings" class="icon-btn"></button>
       </div>
@@ -265,6 +269,22 @@
         </table>
       </div>
       <button class="btn close-modal-btn" id="close-admin-btn">Close</button>
+    </div>
+  </div>
+
+  <!-- Leaderboard Modal -->
+  <div id="leaderboard-modal" class="custom-modal" style="display: none;">
+    <div class="custom-modal-content glass-panel">
+      <h2>🏆 Hall of Fame</h2>
+      <div class="table-container">
+        <table id="leaderboard-table">
+          <thead>
+            <tr><th>Rank</th><th>Name</th><th>Level</th><th>Score</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn close-modal-btn" id="close-leaderboard-btn">Close</button>
     </div>
   </div>
 

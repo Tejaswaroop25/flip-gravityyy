@@ -1476,6 +1476,10 @@ function handleCredentialResponse(response) {
     const name = payload.name;
     userEmail = payload.email; // Capture email
     
+    // UI Update: Show email next to name
+    const emailDisplay = document.getElementById('display-player-email');
+    if (emailDisplay) emailDisplay.innerText = userEmail;
+
     // Admin check: Redirect or show button
     const allowedEmail = "vu.241fa04d46@gmail.com";
     const adminBtn = document.getElementById('admin-panel-btn');
@@ -1601,6 +1605,11 @@ continueBtn.addEventListener('click', () => {
     }
     playerNameInput.setCustomValidity("");
     document.getElementById('display-player-name').textContent = name;
+    
+    // Show "Guest" for email display if playing as guest
+    const emailDisplay = document.getElementById('display-player-email');
+    if (emailDisplay) emailDisplay.innerText = "Logged in as Guest";
+
     proceedToGame();
 });
 

@@ -14,6 +14,7 @@ let gamePaused = false;
 let scaleX = 1;
 let scaleY = 1;
 let userEmail = null; // Store logged in user email
+let sessionStartTime = null; // Track when the level started
 
 // ── DIFFICULTY SYSTEM ──────────────────────────────────────────────
 let difficultyMultiplier = 1;     // scales gravity; increases with level
@@ -746,6 +747,7 @@ function initLevel(index) {
     container.classList.remove('gravity-flipped');
     gameActive = true;
     gamePaused = false;
+    sessionStartTime = Date.now(); // Start tracking time spent this session
     overlay.classList.remove('visible');
     const overlayBtn = document.getElementById('overlay-button');
     if (overlayBtn) {
@@ -1851,16 +1853,21 @@ const API_URL = isLocal ? 'http://localhost:5000/api' : '/api';
 
 async function sendPlayerData(name, level, score) {
     if (!name || name === 'Player') return;
+    
+    // Calculate time spent on this specific level attempt
+    const timeSpentThisLevel = sessionStartTime ? Math.floor((Date.now() - sessionStartTime) / 1000) : 0;
+
     try {
         const response = await fetch(`${API_URL}/players`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 name, 
-                email: userEmail, // Now sending email
+                email: userEmail, 
                 level, 
                 score,
-                coins // Now sending coins
+                coins,
+                timeSpentThisLevel // Sending time spent this session
             })
         });
         if (!response.ok) throw new Error('Failed to save data');
@@ -1890,6 +1897,19 @@ if (adminBtn) {
 }
 
 if (closeAdminBtn) closeAdminBtn.addEventListener('click', () => adminModal.style.display = 'none');
+function formatTimePlayed(seconds) {
+    if (!seconds) return '0s';
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    
+    let result = '';
+    if (hrs > 0) result += `${hrs}h `;
+    if (mins > 0 || hrs > 0) result += `${mins}m `;
+    result += `${secs}s`;
+    return result;
+}
+
 if (refreshAdminBtn) refreshAdminBtn.addEventListener('click', fetchAdminData);
 
 async function fetchAdminData() {
@@ -1907,7 +1927,8 @@ async function fetchAdminData() {
                 <td>${p.name}</td>
                 <td>#${index + 1}</td>
                 <td>${p.score}</td>
-                <td>${p.level}</td>
+                <td>Lvl ${p.level}</td>
+                <td>${formatTimePlayed(p.totalTimePlayed)}</td>
                 <td style="font-size: 11px;">${new Date(p.createdAt).toLocaleString()}</td>
             `;
             adminTableBody.appendChild(row);

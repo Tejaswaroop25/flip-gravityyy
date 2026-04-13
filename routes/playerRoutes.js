@@ -5,7 +5,7 @@ const Player = require('../models/Player');
 // POST /api/players
 router.post('/players', async (req, res) => {
   try {
-    const { email, name, level, score, coins } = req.body;
+    const { email, name, level, score, coins, timeSpentThisLevel } = req.body;
     
     if (!name || level === undefined || score === undefined) {
       return res.status(400).json({ error: 'Name, level, and score are required' });
@@ -13,13 +13,20 @@ router.post('/players', async (req, res) => {
 
     // Use email as unique ID if available, otherwise name
     const query = email ? { email } : { name };
+    
+    // Update basic stats, increment time played
     const update = { 
-      name, 
-      email, 
-      level: parseInt(level), 
-      score: parseInt(score), 
-      coins: parseInt(coins) || 0,
-      createdAt: new Date() 
+      $set: {
+        name, 
+        email, 
+        level: parseInt(level), 
+        score: parseInt(score), 
+        coins: parseInt(coins) || 0,
+        createdAt: new Date()
+      },
+      $inc: {
+        totalTimePlayed: parseInt(timeSpentThisLevel) || 0
+      }
     };
 
     const player = await Player.findOneAndUpdate(query, update, { 
@@ -48,6 +55,7 @@ router.get('/players', async (req, res) => {
           level: { $first: "$level" },
           score: { $first: "$score" },
           coins: { $first: "$coins" },
+          totalTimePlayed: { $first: "$totalTimePlayed" },
           createdAt: { $first: "$createdAt" }
         }
       },

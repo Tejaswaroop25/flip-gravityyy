@@ -6,6 +6,7 @@ const playerSchema = new mongoose.Schema({
   level: { type: Number, required: true },
   score: { type: Number, required: true },
   coins: { type: Number, default: 0 },
+  totalTimePlayed: { type: Number, default: 0 }, // Store time in seconds
   createdAt: { type: Date, default: Date.now }
 });
 

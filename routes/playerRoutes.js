@@ -101,4 +101,16 @@ router.get('/leaderboard', async (req, res) => {
   }
 });
 
+// DELETE /api/players/:id
+router.delete('/players/:id', async (req, res) => {
+  try {
+    const player = await Player.findByIdAndDelete(req.params.id);
+    if (!player) return res.status(404).json({ error: 'Player not found' });
+    res.status(200).json({ message: 'Player deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting player:', err);
+    res.status(500).json({ error: 'Failed to delete player' });
+  }
+});
+
 module.exports = router;

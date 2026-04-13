@@ -109,8 +109,8 @@
             <div id="display-player-name" style="font-size: 14px; font-weight: 600; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;">Player</div>
         </div>
         <button id="leaderboard-btn" title="Leaderboard" class="icon-btn">🏆</button>
-        <button id="how-to-play-btn" title="How to Play" class="icon-btn"></button>
-        <button id="game-settings-btn" title="Settings" class="icon-btn"></button>
+        <button id="how-to-play-btn" title="How to Play" class="icon-btn">📖</button>
+        <button id="game-settings-btn" title="Settings" class="icon-btn">⚙️</button>
       </div>
     </div>
 
@@ -180,6 +180,10 @@
         <button class="game-setting-btn close-btn" id="reset-progress-btn"
           style="background: linear-gradient(135deg, #4b5563, #374151); margin-top: 10px;">
           <span>🔄</span> Reset Progress
+        </button>
+        <button class="game-setting-btn exit-btn" id="logout-btn"
+          style="background: linear-gradient(135deg, #ef4444, #dc2626); margin-top: 10px;">
+          <span>🚪</span> Logout Account
         </button>
         <button class="game-setting-btn close-btn" id="close-game-settings">
           <span>✖️</span> Close Settings
@@ -270,6 +274,7 @@
               <th>Level</th>
               <th>Time</th>
               <th>Date & Time</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody></tbody>

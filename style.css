@@ -281,15 +281,22 @@ body::before {
 
 /* Tutorial Gesture Fix */
 #tutorial-gesture {
-  font-size: 48px !important;
-  margin: 20px 0;
-  filter: drop-shadow(0 0 15px var(--primary-glow));
+  font-size: 64px !important;
+  margin: 15px 0;
+  filter: drop-shadow(0 0 20px var(--primary-glow));
   animation: bounceSoft 2s infinite ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#mobile-controls-toggle {
+  display: none !important; /* Remove the floating control button that creates clutter */
 }
 
 @keyframes bounceSoft {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-15px) scale(1.1); }
 }
 
 .key-badge {

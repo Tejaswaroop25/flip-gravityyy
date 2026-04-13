@@ -1476,19 +1476,22 @@ function handleCredentialResponse(response) {
     const name = payload.name;
     userEmail = payload.email; // Capture email
     
-    // Admin check: show button only if email matches
+    // Admin check: Redirect or show button
     const allowedEmail = "vu.241fa04d46@gmail.com";
     const adminBtn = document.getElementById('admin-panel-btn');
-    if (adminBtn) {
-        if (userEmail === allowedEmail) {
-            adminBtn.style.display = 'flex';
-        } else {
-            adminBtn.style.display = 'none';
-        }
+    
+    if (userEmail === allowedEmail) {
+        // Logged in as Admin: Open Panel Directly
+        if (adminBtn) adminBtn.style.display = 'flex';
+        fetchAdminData();
+        document.getElementById('admin-modal').style.display = 'flex';
+        // We stay on home screen but with the modal open
+    } else {
+        // Regular User: Proceed to Level Selection
+        if (adminBtn) adminBtn.style.display = 'none';
+        document.getElementById('display-player-name').textContent = name;
+        proceedToGame();
     }
-
-    document.getElementById('display-player-name').textContent = name;
-    proceedToGame();
 }
 
 function proceedToGame() {

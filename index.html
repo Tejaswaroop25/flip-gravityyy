@@ -92,25 +92,24 @@
         </button>
       </div>
       <div class="header-center" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-        <div id="level-indicator" style="margin-top: 0; margin-bottom: 5px; font-size: 16px;">LEVEL 1</div>
-        <div id="game-stats">
-          <div id="timer-container" title="Time Remaining">
-            <span id="timer-icon">⏱️</span>
-            <span id="timer-value">00:00</span>
-          </div>
-          <div id="score-container" title="Current Coins">
-            <span id="score-icon">🪙</span>
-            <span id="score-value">0</span>
-          </div>
+      <div id="game-stats">
+        <div id="timer-container" title="Time Remaining">
+          <span id="timer-icon">⏱️</span>
+          <span id="timer-value">00:00</span>
+        </div>
+        <div id="score-container" title="Current Coins">
+          <span id="score-icon">🪙</span>
+          <span id="score-value">0</span>
         </div>
       </div>
+    </div>
       <div class="header-right" style="gap: 8px;">
         <div id="player-badge" style="background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center;">
             <div id="display-player-name" style="font-size: 14px; font-weight: 600; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;">Player</div>
         </div>
         <button id="leaderboard-btn" title="Leaderboard" class="icon-btn">🏆</button>
-        <button id="how-to-play-btn" title="How to Play" class="icon-btn">📖</button>
-        <button id="game-settings-btn" title="Settings" class="icon-btn">⚙️</button>
+        <button id="how-to-play-btn" title="How to Play" class="icon-btn"></button>
+        <button id="game-settings-btn" title="Settings" class="icon-btn"></button>
       </div>
     </div>
 
@@ -177,13 +176,12 @@
         <button class="game-setting-btn exit-btn" id="exit-btn">
           <span>🏠</span> Exit to Home
         </button>
+        <button class="game-setting-btn delete-btn" id="logout-btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 10px;">
+          <span>🚪</span> Logout Account
+        </button>
         <button class="game-setting-btn close-btn" id="reset-progress-btn"
           style="background: linear-gradient(135deg, #4b5563, #374151); margin-top: 10px;">
           <span>🔄</span> Reset Progress
-        </button>
-        <button class="game-setting-btn exit-btn" id="logout-btn"
-          style="background: linear-gradient(135deg, #ef4444, #dc2626); margin-top: 10px;">
-          <span>🚪</span> Logout Account
         </button>
         <button class="game-setting-btn close-btn" id="close-game-settings">
           <span>✖️</span> Close Settings
@@ -274,7 +272,7 @@
               <th>Level</th>
               <th>Time</th>
               <th>Date & Time</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody></tbody>

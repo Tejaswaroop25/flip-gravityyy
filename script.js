@@ -80,23 +80,23 @@ let currentTutorialStep = 0;
 const tutorialSteps = [
     {
         title: "MOVE LEFT & RIGHT",
-        desc: "Use <kbd>Arrow Left</kbd> and <kbd>Arrow Right</kbd> to move. On mobile, use the D-pad.",
+        desc: "Use <span class='key-badge'>←</span> and <span class='key-badge'>→</span> to move. On mobile, use the D-pad.",
         gesture: "⬅️ ➡️"
     },
     {
         title: "FLIP GRAVITY",
-        desc: "Press <kbd>Space</kbd> or use Up/Down arrows to flip gravity! Gravity pulls you up or down.",
+        desc: "Press <span class='key-badge'>Space</span> or use Up/Down arrows to flip gravity!",
         gesture: "🔄"
     },
     {
         title: "DODGE SPIKES",
-        desc: "Red spikes are <span style='color:#ef4444;font-weight:bold;'>Instant Death</span>. Avoid them at all costs.",
+        desc: "Red spikes are <span style='color:#ef4444;font-weight:bold;'>Instant Death</span>.",
         gesture: "⚠️"
     },
     {
         title: "REACH THE PORTAL",
         desc: "Make your way to the glowing green portal to clear the level.",
-        gesture: "🌀"
+        gesture: "🟩"
     },
     {
         title: "BE FAST!",
@@ -1622,16 +1622,6 @@ continueBtn.addEventListener('click', () => {
     proceedToGame();
 });
 
-// Logout Button Logic
-const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-        userEmail = null;
-        localStorage.removeItem('userEmail');
-        location.reload(); // Hard reload to clear state and return to login
-    });
-}
-
 // homeBtn functionality removed (header removed from level selection)
 
 gameSettingsBtn.addEventListener('click', () => { gameSettingsModal.style.display = 'flex'; });
@@ -1659,6 +1649,16 @@ exitBtn.addEventListener('click', () => {
     gameSettingsModal.style.display = 'none';
     showLevelSelection();
 });
+
+const logoutBtn = document.getElementById('logout-btn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        userEmail = null;
+        localStorage.removeItem('flip_userEmail');
+        gameSettingsModal.style.display = 'none';
+        location.reload(); 
+    });
+}
 
 document.getElementById('reset-progress-btn').addEventListener('click', () => {
     if (confirm('Are you sure you want to reset all progress? You will lose unlocked levels and coins.')) {
@@ -1922,20 +1922,6 @@ function formatTimePlayed(seconds) {
 
 if (refreshAdminBtn) refreshAdminBtn.addEventListener('click', fetchAdminData);
 
-async function deletePlayer(id) {
-    if (!confirm('Are you sure you want to delete this player?')) return;
-    try {
-        const response = await fetch(`${API_URL}/players/${id}`, { method: 'DELETE' });
-        if (response.ok) {
-            fetchAdminData(); // Refresh table
-        } else {
-            alert('Failed to delete player');
-        }
-    } catch (err) {
-        console.error('Error deleting:', err);
-    }
-}
-
 async function fetchAdminData() {
     try {
         const response = await fetch(`${API_URL}/players`);
@@ -1955,7 +1941,7 @@ async function fetchAdminData() {
                 <td>${formatTimePlayed(p.totalTimePlayed)}</td>
                 <td style="font-size: 11px;">${new Date(p.createdAt).toLocaleString()}</td>
                 <td>
-                    <button onclick="deletePlayer('${p._id}')" style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Delete</button>
+                    <button class="delete-btn" onclick="deletePlayerRow('${p._id}')" style="padding: 4px 8px; font-size: 10px; background: #ef4444; border-radius: 4px;">Delete</button>
                 </td>
             `;
             adminTableBody.appendChild(row);
@@ -1999,3 +1985,24 @@ if (leaderboardBtn) {
 }
 
 if (closeLeaderboardBtn) closeLeaderboardBtn.addEventListener('click', () => leaderboardModal.style.display = 'none');
+
+async function deletePlayerRow(id) {
+    if (!confirm('Are you sure you want to delete this player?')) return;
+    try {
+        const response = await fetch(`${API_URL}/players/${id}`, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            fetchAdminData(); // Refresh list
+        } else {
+            alert('Failed to delete player');
+        }
+    } catch (err) {
+        console.error('Error deleting player:', err);
+    }
+}
+
+// Ensure functions are global for onclick
+window.deletePlayerRow = deletePlayerRow;
+window.nextLevel = nextLevel;
+window.restartLevel = restartLevel;

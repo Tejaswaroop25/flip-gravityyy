@@ -1450,7 +1450,7 @@ startBtn.addEventListener('click', () => {
         // Initialize Google Identity Services
         if (window.google) {
             google.accounts.id.initialize({
-                client_id: "241360241669-d9o61lshh20j6u4ug2ejsh6bs6lru15r.apps.googleusercontent.com", // User client ID
+                client_id: "390415853213-4dah0i5bqhcioq5b8p731a9rcdpur0ml.apps.googleusercontent.com", // Updated Client ID
                 callback: handleCredentialResponse
             });
             google.accounts.id.renderButton(

@@ -1476,6 +1476,17 @@ function handleCredentialResponse(response) {
     const name = payload.name;
     userEmail = payload.email; // Capture email
     
+    // Admin check: show button only if email matches
+    const allowedEmail = "vu.241fa04d46@gmail.com";
+    const adminBtn = document.getElementById('admin-panel-btn');
+    if (adminBtn) {
+        if (userEmail === allowedEmail) {
+            adminBtn.style.display = 'flex';
+        } else {
+            adminBtn.style.display = 'none';
+        }
+    }
+
     document.getElementById('display-player-name').textContent = name;
     proceedToGame();
 }
@@ -1844,18 +1855,12 @@ const totalPlayersEl = document.getElementById('total-players');
 
 if (adminBtn) {
     adminBtn.addEventListener('click', async () => {
-        const allowedEmail = "tejagokavarapu367@gmail.com";
+        const allowedEmail = "vu.241fa04d46@gmail.com";
         
         if (userEmail === allowedEmail) {
             await fetchAdminData();
             adminModal.style.display = 'flex';
-        } else {
-            if (!userEmail) {
-                alert("Please login with Google to verify admin access.");
-            } else {
-                alert(`Access Denied. Admin access is restricted to ${allowedEmail}. You are logged in as ${userEmail}.`);
-            }
-        }
+        } 
     });
 }
 

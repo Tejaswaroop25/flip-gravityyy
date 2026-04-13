@@ -13,7 +13,7 @@ let gameActive = false;
 let gamePaused = false;
 let scaleX = 1;
 let scaleY = 1;
-let userEmail = localStorage.getItem('flip_userEmail'); // Persist session on refresh
+let userEmail = null; // Store logged in user email
 let sessionStartTime = null; // Track when the level started
 
 // ── DIFFICULTY SYSTEM ──────────────────────────────────────────────
@@ -34,17 +34,25 @@ let unlockedLevels = parseInt(localStorage.getItem('flip_unlockedLevels')) || 1;
 let coins = parseInt(localStorage.getItem('flip_coins')) || 0;
 
 function saveProgress() {
-    const emailSuffix = (userEmail && userEmail !== 'null') ? `_${userEmail}` : '';
-    localStorage.setItem(`flip_unlockedLevels${emailSuffix}`, unlockedLevels || 1);
-    localStorage.setItem(`flip_coins${emailSuffix}`, coins || 0);
+    const emailSuffix = userEmail ? `_${userEmail}` : '';
+    localStorage.setItem(`flip_unlockedLevels${emailSuffix}`, unlockedLevels);
+    localStorage.setItem(`flip_coins${emailSuffix}`, coins);
 }
 
 function loadUserProgress() {
-    const emailSuffix = (userEmail && userEmail !== 'null') ? `_${userEmail}` : '';
+    const emailSuffix = userEmail ? `_${userEmail}` : '';
     unlockedLevels = parseInt(localStorage.getItem(`flip_unlockedLevels${emailSuffix}`)) || 1;
     coins = parseInt(localStorage.getItem(`flip_coins${emailSuffix}`)) || 0;
     updateScoreUI();
-    renderLevelGrid(); 
+    // Only re-render the grid if the element exists on screen
+    const grid = document.getElementById('level-grid');
+    if (grid) renderLevelGrid();
+}
+
+function updateScoreUI() {
+    // Lazily query each time — safe to call before or after DOM is ready
+    const sv = document.getElementById('score-value');
+    if (sv) sv.innerText = coins;
 }
 
 // DOM Elements
@@ -692,6 +700,7 @@ function startLevel(index) {
     currentLevelIndex = index;
     levelSelectionScreen.style.display = 'none';
     document.getElementById('game-content').style.display = 'flex';
+    updateScoreUI(); // Ensure coins display is correct before entering level
     initLevel(index);
 }
 
@@ -866,16 +875,17 @@ function stopTimer() {
 }
 
 function updateTimerUI() {
-    if (!timerValue) return;
+    const tv = document.getElementById('timer-value');
+    if (!tv) return;
 
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
-    timerValue.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    tv.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
     if (timeLeft <= 5) {
-        timerValue.classList.add('timer-low');
+        tv.classList.add('timer-low');
     } else {
-        timerValue.classList.remove('timer-low');
+        tv.classList.remove('timer-low');
     }
 }
 
@@ -1852,23 +1862,6 @@ window.addEventListener('orientationchange', () => {
 // Global Next Level function (for overlay button)
 window.nextLevel = nextLevel;
 window.restartLevel = restartLevel;
-
-function updateScoreUI() {
-    const scoreEl = document.getElementById('score-value');
-    if (scoreEl) scoreEl.innerText = coins || 0;
-}
-
-function updateTimerUI() {
-    const timerEl = document.getElementById('timer-value');
-    if (!timerEl) return;
-
-    const m = Math.floor(timeLeft / 60);
-    const s = timeLeft % 60;
-    timerEl.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-
-    if (timeLeft <= 5) timerEl.classList.add('timer-low');
-    else timerEl.classList.remove('timer-low');
-}
 
 hideMobileControls();
 updateScoreUI();

@@ -1855,7 +1855,13 @@ async function sendPlayerData(name, level, score) {
         const response = await fetch(`${API_URL}/players`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, level, score })
+            body: JSON.stringify({ 
+                name, 
+                email: userEmail, // Now sending email
+                level, 
+                score,
+                coins // Now sending coins
+            })
         });
         if (!response.ok) throw new Error('Failed to save data');
         console.log('Player data saved successfully');

@@ -13,7 +13,7 @@ let gameActive = false;
 let gamePaused = false;
 let scaleX = 1;
 let scaleY = 1;
-let userEmail = null; // Store logged in user email
+let userEmail = localStorage.getItem('flip_userEmail'); // Persist session on refresh
 let sessionStartTime = null; // Track when the level started
 
 // ── DIFFICULTY SYSTEM ──────────────────────────────────────────────
@@ -1852,6 +1852,10 @@ window.addEventListener('orientationchange', () => {
 // Global Next Level function (for overlay button)
 window.nextLevel = nextLevel;
 window.restartLevel = restartLevel;
+
+function updateScoreUI() {
+    if (scoreValue) scoreValue.innerText = coins;
+}
 
 hideMobileControls();
 updateScoreUI();

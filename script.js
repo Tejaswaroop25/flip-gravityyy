@@ -33,8 +33,17 @@ let unlockedLevels = parseInt(localStorage.getItem('flip_unlockedLevels')) || 1;
 let coins = parseInt(localStorage.getItem('flip_coins')) || 0;
 
 function saveProgress() {
-    localStorage.setItem('flip_unlockedLevels', unlockedLevels);
-    localStorage.setItem('flip_coins', coins);
+    const emailSuffix = userEmail ? `_${userEmail}` : '';
+    localStorage.setItem(`flip_unlockedLevels${emailSuffix}`, unlockedLevels);
+    localStorage.setItem(`flip_coins${emailSuffix}`, coins);
+}
+
+function loadUserProgress() {
+    const emailSuffix = userEmail ? `_${userEmail}` : '';
+    unlockedLevels = parseInt(localStorage.getItem(`flip_unlockedLevels${emailSuffix}`)) || 1;
+    coins = parseInt(localStorage.getItem(`flip_coins${emailSuffix}`)) || 0;
+    updateScoreUI();
+    renderLevelGrid(); // Refresh the grid to show newly unlocked levels
 }
 
 // DOM Elements
@@ -1476,9 +1485,8 @@ function handleCredentialResponse(response) {
     const name = payload.name;
     userEmail = payload.email; // Capture email
     
-    // UI Update: Show email next to name
-    const emailDisplay = document.getElementById('display-player-email');
-    if (emailDisplay) emailDisplay.innerText = userEmail;
+    // Load progress specific to this email
+    loadUserProgress();
 
     // Admin check: Redirect or show button
     const allowedEmail = "vu.241fa04d46@gmail.com";
@@ -1489,7 +1497,6 @@ function handleCredentialResponse(response) {
         if (adminBtn) adminBtn.style.display = 'flex';
         fetchAdminData();
         document.getElementById('admin-modal').style.display = 'flex';
-        // We stay on home screen but with the modal open
     } else {
         // Regular User: Proceed to Level Selection
         if (adminBtn) adminBtn.style.display = 'none';
@@ -1887,13 +1894,15 @@ async function fetchAdminData() {
         totalPlayersEl.innerText = `Total Players: ${players.length}`;
         adminTableBody.innerHTML = '';
         
-        players.forEach(p => {
+        players.forEach((p, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
+                <td style="font-size: 11px;">${p.email || 'N/A'}</td>
                 <td>${p.name}</td>
-                <td>${p.level}</td>
+                <td>#${index + 1}</td>
                 <td>${p.score}</td>
-                <td>${new Date(p.createdAt).toLocaleString()}</td>
+                <td>${p.level}</td>
+                <td style="font-size: 11px;">${new Date(p.createdAt).toLocaleString()}</td>
             `;
             adminTableBody.appendChild(row);
         });
@@ -1923,6 +1932,7 @@ if (leaderboardBtn) {
                     <td>${p.name}</td>
                     <td>${p.level}</td>
                     <td>${p.score}</td>
+                    <td>${p.coins || 0}</td>
                 `;
                 leaderboardTableBody.appendChild(row);
             });

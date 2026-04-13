@@ -93,19 +93,49 @@ body::before {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 8px 15px;
   background: var(--glass-bg);
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  margin-bottom: 8px;
-  width: 75%;
+  border-radius: 12px;
+  margin-bottom: 5px;
+  width: 95%;
   max-width: 1000px;
   box-sizing: border-box;
   box-shadow: var(--card-shadow), 0 0 30px rgba(0, 255, 136, 0.05);
   z-index: 100;
-  flex-wrap: wrap;
-  gap: 15px;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  #game-header {
+    padding: 5px 10px;
+    gap: 5px;
+  }
+  
+  #player-badge {
+    padding: 3px 8px !important;
+  }
+  
+  #display-player-name {
+    font-size: 11px !important;
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .icon-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 14px !important;
+  }
+  
+  #game-stats {
+    gap: 8px !important;
+    padding: 4px 8px !important;
+  }
 }
 
 #game-stats {

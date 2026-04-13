@@ -1831,7 +1831,7 @@ loop();
 
 // --- BACKEND INTEGRATION ---
 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
-const API_URL = isLocal ? 'http://localhost:5000/api' : `http://${window.location.hostname}:5000/api`;
+const API_URL = isLocal ? 'http://localhost:5000/api' : '/api';
 
 async function sendPlayerData(name, level, score) {
     if (!name || name === 'Player') return;

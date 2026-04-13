@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flip – Gravity Switch Puzzle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+</head>
+
+<body>
+
+  <div id="home-screen">
+    <button id="admin-panel-btn" style="position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 12px; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: 'Outfit', sans-serif; font-size: 14px; z-index: 100; transition: all 0.3s;" onmouseover="this.style.background='rgba(30, 41, 59, 0.9)'" onmouseout="this.style.background='rgba(15, 23, 42, 0.6)'">
+      <span>🔒</span> Admin
+    </button>
+    <h1>FLIP</h1>
+    <p>gravity operator</p>
+    <button class="btn" id="start-btn">Start Game</button>
+
+    <div id="player-setup"
+      style="display: none; flex-direction: column; align-items: center; gap: 20px; margin-top: 20px; width: 100%; max-width: 350px;">
+      
+      <div id="auth-options" style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+        <button id="google-login-btn" class="auth-btn google-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Login with Google
+        </button>
+        
+        <div class="auth-divider">
+          <span>OR</span>
+        </div>
+        
+        <button id="guest-btn" class="auth-btn guest-btn">
+          <span>👤</span> Play as Guest
+        </button>
+      </div>
+
+      <div id="name-input-container" style="display: none; flex-direction: column; align-items: center; gap: 15px; width: 100%;">
+        <div class="input-group" style="width: 100%;">
+          <input type="text" id="player-name" placeholder="Choose a username" maxlength="15" required>
+        </div>
+        <div style="display: flex; gap: 10px; width: 100%;">
+          <button class="btn" id="continue-btn" style="flex: 2;">Continue</button>
+          <button class="btn secondary-btn" id="back-to-auth-btn" style="flex: 1; padding: 12px; font-size: 14px;">Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Level Selection Screen -->
+  <div id="level-selection-screen" style="display: none;">
+    <div class="level-selection-header"
+      style="width: 100%; display: flex; justify-content: flex-start; margin-bottom: 20px;">
+      <button id="level-selection-back-btn" class="glass-back-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back
+      </button>
+    </div>
+    <h1 class="selection-title">Select Level</h1>
+    <div id="level-grid">
+      <!-- Level cards will be generated here by script.js -->
+    </div>
+  </div>
+
+  <!-- Loser Flash Overlay -->
+  <div id="loser-flash"></div>
+
+  <div id="game-content" style="display: none; flex-direction: column; align-items: center;">
+    <div id="game-header">
+      <div class="header-left">
+        <button id="in-game-back-btn" class="glass-back-btn" title="Back" style="padding: 10px; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+      </div>
+      <div class="header-center" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div id="level-indicator" style="margin-top: 0; margin-bottom: 5px; font-size: 16px;">LEVEL 1</div>
+        <div id="game-stats">
+          <div id="timer-container" title="Time Remaining">
+            <span id="timer-icon">⏱️</span>
+            <span id="timer-value">00:00</span>
+          </div>
+          <div id="score-container" title="Current Coins">
+            <span id="score-icon">🪙</span>
+            <span id="score-value">0</span>
+          </div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div id="display-player-name">Player</div>
+        <button id="how-to-play-btn" title="How to Play" class="icon-btn" style="margin-right: 10px;"></button>
+        <button id="game-settings-btn" title="Settings" class="icon-btn"></button>
+      </div>
+    </div>
+
+    <div id="game-container">
+      <canvas id="gameCanvas" width="800" height="500"></canvas>
+      <div id="tutorial-overlay" style="display: none;">
+        <div id="tutorial-step-container">
+          <div class="tutorial-step-indicator">
+            <span id="tutorial-step-num">1</span> / <span id="tutorial-step-total">5</span>
+          </div>
+          <div id="tutorial-gesture">⬅️ ➡️</div>
+          <div id="tutorial-title">MOVE LEFT & RIGHT</div>
+          <div id="tutorial-desc">Use <kbd>Arrow Left</kbd> and <kbd>Arrow Right</kbd> keys to move</div>
+          <div class="tutorial-progress-bar"><div id="tutorial-progress-fill"></div></div>
+          <button id="tutorial-next-btn" class="btn tutorial-btn">Next →</button>
+          <button id="tutorial-skip-btn" class="tutorial-skip">Skip Tutorial</button>
+        </div>
+      </div>
+      <div id="message-overlay">
+        <div id="message-header">Level Complete!</div>
+        <div id="message-text">Bonus coins added for speed!</div>
+        <button class="btn" id="overlay-button" onclick="nextLevel()">Continue</button>
+        <button class="btn btn-buy-time" id="buy-time-btn" style="display:none;">⏱️ +10s for 100 🪙</button>
+        <div id="coin-balance-hint" style="display:none;"></div>
+      </div>
+    </div>
+
+
+    <!-- Mobile Controls -->
+    <button id="mobile-controls-toggle">🎮 Controls</button>
+    <div class="mobile-control-btn left-btn movable" id="mobile-left-btn">←</div>
+    <div class="mobile-control-btn right-btn movable" id="mobile-right-btn">→</div>
+    <div class="mobile-control-btn up-btn movable" id="mobile-up-btn">↑</div>
+    <div class="mobile-control-btn down-btn movable" id="mobile-down-btn">↓</div>
+  </div>
+
+  <!-- Game Settings Modal -->
+  <div id="game-settings-modal">
+    <div id="game-settings-content">
+      <h2>🎮 Game Settings</h2>
+
+      <div class="settings-section">
+        <h3>🎯 Game Controls</h3>
+        <button class="game-setting-btn pause-btn" id="pause-btn">
+          <span>⏸️</span> Pause Game
+        </button>
+        <button class="game-setting-btn play-btn" id="resume-btn" style="display: none;">
+          <span>▶️</span> Resume Game
+        </button>
+      </div>
+
+      <div class="settings-section">
+        <h3>📱 Mobile Settings</h3>
+        <div class="setting-toggle">
+          <label class="setting-label">
+            <span>🎮</span> Movable Controls
+          </label>
+          <div class="toggle-switch" id="movable-controls-toggle"></div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>🚪 Exit Options</h3>
+        <button class="game-setting-btn exit-btn" id="exit-btn">
+          <span>🏠</span> Exit to Home
+        </button>
+        <button class="game-setting-btn close-btn" id="reset-progress-btn"
+          style="background: linear-gradient(135deg, #4b5563, #374151); margin-top: 10px;">
+          <span>🔄</span> Reset Progress
+        </button>
+        <button class="game-setting-btn close-btn" id="close-game-settings">
+          <span>✖️</span> Close Settings
+        </button>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Instructions Modal -->
+  <div id="instructions-modal">
+    <div id="instructions-content">
+      <h2>📖 How to Play</h2>
+      
+      <div class="instructions-section">
+        <h3>🎯 Objective</h3>
+        <p>Navigate your glowing cube through each level and reach the <strong style="color: #00ff88;">green exit portal</strong> before time runs out. Progress through increasingly difficult levels to prove your mastery!</p>
+      </div>
+
+      <div class="instructions-section">
+        <h3>⌨️ Keyboard Controls</h3>
+        <div class="controls-grid">
+          <div class="control-row"><kbd class="key-badge">←</kbd><kbd class="key-badge">→</kbd><span>Move Left / Right</span></div>
+          <div class="control-row"><kbd class="key-badge">Space</kbd><span>Flip Gravity (toggle ceiling/floor)</span></div>
+          <div class="control-row"><kbd class="key-badge">R</kbd><span>Restart Current Level</span></div>
+        </div>
+      </div>
+
+      <div class="instructions-section">
+        <h3>📱 Mobile / Touch Controls</h3>
+        <div class="controls-grid">
+          <div class="control-row"><span class="touch-badge">←</span><span class="touch-badge">→</span><span>D-pad buttons to move</span></div>
+          <div class="control-row"><span class="touch-badge">↑</span><span>Flip gravity UP (ceiling)</span></div>
+          <div class="control-row"><span class="touch-badge">↓</span><span>Flip gravity DOWN (floor)</span></div>
+        </div>
+      </div>
+
+      <div class="instructions-section">
+        <h3>⚖️ Gravity Mechanics</h3>
+        <p>Press <kbd class="key-badge">Space</kbd> to <strong>instantly flip gravity</strong>. Your cube will fall upward to the ceiling or back down to the floor. Use this to dodge obstacles, navigate platforms, and reach the exit portal. Timing is everything!</p>
+      </div>
+
+      <div class="instructions-section">
+        <h3>⏱️ Timer & 🪙 Coins</h3>
+        <p>Each level has a <strong style="color: #10b981;">countdown timer</strong>. Complete the level before it hits zero! Finishing quickly earns you <strong style="color: #f59e0b;">bonus coins</strong> based on remaining time. If you run out of time, spend <strong>100 🪙</strong> to buy <strong>+10 seconds</strong>.</p>
+      </div>
+
+      <div class="instructions-section">
+        <h3>💥 Hazards & Death</h3>
+        <p><strong style="color: #ef4444;">Red spikes</strong> — instant death on contact!<br>
+        <strong style="color: #ff6600;">Orange moving blocks</strong> (Level 7+) — deadly moving obstacles that bounce around.<br>
+        <strong>Falling off-screen</strong> — if your cube leaves the play area, you die.</p>
+      </div>
+
+      <div class="instructions-section">
+        <h3>💡 Pro Tips</h3>
+        <p>• Flip gravity <em>before</em> you reach a spike to soar over it.<br>
+        • Platforms on the ceiling are just as useful as floor platforms!<br>
+        • Speed = more coins. Don't be cautious, be <em>fast</em>.<br>
+        • Later levels limit your gravity flips — plan each flip carefully!<br>
+        • Use <kbd class="key-badge">R</kbd> to quickly restart if you get stuck.</p>
+      </div>
+
+      <button class="game-setting-btn close-btn" id="close-instructions-btn" style="margin-top: 25px;">
+        <span>✖️</span> Close
+      </button>
+    </div>
+  </div>
+
+
+
+  <!-- Admin Panel Modal -->
+  <div id="admin-modal" class="custom-modal" style="display: none;">
+    <div class="custom-modal-content glass-panel">
+      <h2>🔒 Admin Panel</h2>
+      <div class="admin-controls" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <span id="total-players">Total Players: 0</span>
+        <button class="btn" id="refresh-admin-btn" style="padding: 8px 15px; font-size: 12px;">🔄 Refresh</button>
+      </div>
+      <div class="table-container">
+        <table id="admin-table">
+          <thead>
+            <tr><th>Name</th><th>Level</th><th>Score</th><th>Date</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn close-modal-btn" id="close-admin-btn">Close</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

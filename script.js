@@ -34,17 +34,17 @@ let unlockedLevels = parseInt(localStorage.getItem('flip_unlockedLevels')) || 1;
 let coins = parseInt(localStorage.getItem('flip_coins')) || 0;
 
 function saveProgress() {
-    const emailSuffix = userEmail ? `_${userEmail}` : '';
-    localStorage.setItem(`flip_unlockedLevels${emailSuffix}`, unlockedLevels);
-    localStorage.setItem(`flip_coins${emailSuffix}`, coins);
+    const emailSuffix = (userEmail && userEmail !== 'null') ? `_${userEmail}` : '';
+    localStorage.setItem(`flip_unlockedLevels${emailSuffix}`, unlockedLevels || 1);
+    localStorage.setItem(`flip_coins${emailSuffix}`, coins || 0);
 }
 
 function loadUserProgress() {
-    const emailSuffix = userEmail ? `_${userEmail}` : '';
+    const emailSuffix = (userEmail && userEmail !== 'null') ? `_${userEmail}` : '';
     unlockedLevels = parseInt(localStorage.getItem(`flip_unlockedLevels${emailSuffix}`)) || 1;
     coins = parseInt(localStorage.getItem(`flip_coins${emailSuffix}`)) || 0;
     updateScoreUI();
-    renderLevelGrid(); // Refresh the grid to show newly unlocked levels
+    renderLevelGrid(); 
 }
 
 // DOM Elements
@@ -1854,7 +1854,20 @@ window.nextLevel = nextLevel;
 window.restartLevel = restartLevel;
 
 function updateScoreUI() {
-    if (scoreValue) scoreValue.innerText = coins;
+    const scoreEl = document.getElementById('score-value');
+    if (scoreEl) scoreEl.innerText = coins || 0;
+}
+
+function updateTimerUI() {
+    const timerEl = document.getElementById('timer-value');
+    if (!timerEl) return;
+
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    timerEl.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+    if (timeLeft <= 5) timerEl.classList.add('timer-low');
+    else timerEl.classList.remove('timer-low');
 }
 
 hideMobileControls();

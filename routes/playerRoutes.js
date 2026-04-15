@@ -45,22 +45,7 @@ router.post('/players', async (req, res) => {
 // GET /api/players
 router.get('/players', async (req, res) => {
   try {
-    const players = await Player.aggregate([
-      { $sort: { createdAt: -1 } },
-      {
-        $group: {
-          _id: { $ifNull: ["$email", "$name"] },
-          email: { $first: "$email" },
-          name: { $first: "$name" },
-          level: { $first: "$level" },
-          score: { $first: "$score" },
-          coins: { $first: "$coins" },
-          totalTimePlayed: { $first: "$totalTimePlayed" },
-          createdAt: { $first: "$createdAt" }
-        }
-      },
-      { $sort: { createdAt: -1 } }
-    ]);
+    const players = await Player.find().sort({ createdAt: -1 });
     res.status(200).json(players);
   } catch (err) {
     console.error('Error fetching players:', err);
@@ -104,8 +89,13 @@ router.get('/leaderboard', async (req, res) => {
 // DELETE /api/players/:id
 router.delete('/players/:id', async (req, res) => {
   try {
-    await Player.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'Player deleted successfully' });
+    const id = req.params.id; // It's an ObjectId now
+    const result = await Player.findByIdAndDelete(id);
+    if (result) {
+      res.status(200).json({ message: 'Player deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Player not found' });
+    }
   } catch (err) {
     console.error('Error deleting player:', err);
     res.status(500).json({ error: 'Failed to delete player' });

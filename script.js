@@ -790,6 +790,10 @@ function showTutorial() {
     document.getElementById('tutorial-step-total').innerText = tutorialSteps.length;
     renderTutorialStep();
     tutorialOverlay.style.display = 'flex';
+    // Hide mobile controls so they don't block the NEXT button
+    hideMobileControls();
+    const mobileToggle = document.getElementById('mobile-controls-toggle');
+    if (mobileToggle) mobileToggle.style.display = 'none';
 }
 
 function renderTutorialStep() {
@@ -813,6 +817,9 @@ function closeTutorial() {
     gameActive = true;
     gamePaused = false;
     hasSeenTutorial = true;
+    // Restore mobile controls toggle visibility
+    const mobileToggle = document.getElementById('mobile-controls-toggle');
+    if (mobileToggle) mobileToggle.style.display = '';
 }
 
 // Event Listeners for Instructions and Tutorial
@@ -1951,7 +1958,7 @@ async function fetchAdminData() {
                 <td>${formatTimePlayed(p.totalTimePlayed)}</td>
                 <td style="font-size: 11px;">${new Date(p.createdAt).toLocaleString()}</td>
                 <td>
-                    <button class="delete-btn" onclick="deletePlayerRow('${p._id}')" style="padding: 4px 8px; font-size: 10px; background: #ef4444; border-radius: 4px;">Delete</button>
+                    <button onclick="deletePlayerRow('${encodeURIComponent(p._id)}')" style="padding: 4px 10px; font-size: 11px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 700;">🗑 Delete</button>
                 </td>
             `;
             adminTableBody.appendChild(row);

@@ -2728,4 +2728,30 @@ canvas {
 .table-container::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
+}
+
+/* Mobile Adjustments for Tutorial Overlay */
+@media (max-width: 900px) {
+  #tutorial-gesture {
+    display: none !important;
+  }
+  #tutorial-step-container {
+    padding: 25px 20px;
+    width: 90%;
+    margin-top: -30px; /* Pull it slightly up away from the mobile controls */
+  }
+  #tutorial-title {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  #tutorial-desc {
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
+  .tutorial-step-indicator {
+    margin-bottom: 12px;
+  }
+  .tutorial-btn {
+    padding: 10px 25px !important;
+  }
 }

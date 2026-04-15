@@ -801,7 +801,7 @@ function initLevel(index) {
     resumeBtn.style.display = 'none';
 
     stopTimer();
-    levelDuration = Math.max(30, 60 - index * 1.5); // timer shrinks with level
+    levelDuration = Math.max(30, Math.floor(60 - index * 1.5)); // timer shrinks with level but stays whole number
     timeLeft = levelDuration;
     updateTimerUI();
     startTimer();

@@ -746,6 +746,23 @@ function initLevel(index) {
         // Level 15+: diagonal mover
         movingBlocks.push({ x: 130, y: 250, w: 50, h: 18, dx: 2.8, dy: 1.6 });
     }
+    if (index >= 16) {
+        // Level 17+: fast horizontal middle mover
+        movingBlocks.push({ x: 400, y: 250, w: 45, h: 25, dx: 3.5 + index * 0.1, dy: 0 });
+    }
+    if (index >= 17) {
+        // Level 18+: large vertical column crushing
+        movingBlocks.push({ x: 50, y: 50, w: 30, h: 100, dx: 0, dy: 3.0 + index * 0.1 });
+    }
+    if (index >= 18) {
+        // Level 19+: bouncy diagonal
+        movingBlocks.push({ x: 600, y: 300, w: 40, h: 18, dx: -(3.5 + index * 0.1), dy: -2.5 });
+    }
+    if (index >= 19) {
+        // Level 20+: the ultimate test, twin diagonal bouncers
+        movingBlocks.push({ x: 300, y: 150, w: 30, h: 30, dx: 4.5, dy: 3.5 });
+        movingBlocks.push({ x: 100, y: 350, w: 30, h: 30, dx: -4.5, dy: -3.5 });
+    }
     // ──────────────────────────────────────────────────────────
 
     player.x = lvl.spawn.x;
@@ -1025,10 +1042,19 @@ function drawSpike(x, y, w, h) {
     const spikeW = w / count;
 
     ctx.beginPath();
-    for (let i = 0; i < count; i++) {
-        ctx.moveTo(x + (i * spikeW), y + h);
-        ctx.lineTo(x + (i * spikeW) + spikeW / 2, y);
-        ctx.lineTo(x + (i * spikeW) + spikeW, y + h);
+    // Spikes attached to ceiling (y < 250) point down. Spikes attached to floor point up.
+    if (y < 250) {
+        for (let i = 0; i < count; i++) {
+            ctx.moveTo(x + (i * spikeW), y);
+            ctx.lineTo(x + (i * spikeW) + spikeW / 2, y + h);
+            ctx.lineTo(x + (i * spikeW) + spikeW, y);
+        }
+    } else {
+        for (let i = 0; i < count; i++) {
+            ctx.moveTo(x + (i * spikeW), y + h);
+            ctx.lineTo(x + (i * spikeW) + spikeW / 2, y);
+            ctx.lineTo(x + (i * spikeW) + spikeW, y + h);
+        }
     }
     ctx.fill();
 }
